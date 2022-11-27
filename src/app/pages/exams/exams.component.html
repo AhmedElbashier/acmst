@@ -1,0 +1,26 @@
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>اسم الطالب</th>
+      <th>الرقم الجامعي</th>
+      <th>البرنامج</th>
+      <th>المستوى</th>
+      <th>الفصل</th>
+      <th>الحالة</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of StudantsData">
+      <td>{{ data.arabicFullName }}</td>
+      <td>{{ data.collegeNumber }}</td>
+      <td>{{ data.program }}</td>
+      <td>{{ data.class }}</td>
+      <td>{{ data.semester }}</td>
+      <td>
+        <a (click)="action(1,data.id)" class="ant-btn">إنتقال</a>
+        <a (click)="action(2,data.id)" class="ant-btn">إعادة</a>
+      </td>
+    </tr>
+  </tbody>
+
+</table>

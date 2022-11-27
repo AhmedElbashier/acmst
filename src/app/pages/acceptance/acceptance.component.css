@@ -1,0 +1,38 @@
+.right {
+  padding-bottom: 10px;
+}
+
+.form {
+  text-align: right;
+  align-items: right;
+}
+
+.phone-select {
+  width: 70px;
+}
+
+.avatar {
+  width: 128px;
+  height: 128px;
+}
+
+.upload-icon {
+  font-size: 32px;
+  color: #999;
+}
+
+.ant-descriptions-item-label {
+
+  font-weight: bolder;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0px;
+  width: 100%;
+  border-top: 1px solid rgb(232, 232, 232);
+  padding: 10px 16px;
+  text-align: right;
+  left: 0px;
+  background: #fff;
+}

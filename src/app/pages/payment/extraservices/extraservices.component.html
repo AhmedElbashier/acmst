@@ -1,0 +1,136 @@
+<nz-drawer [nzBodyStyle]="{
+    height: 'calc(100% - 55px)',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }" [nzMaskClosable]="false" [nzWidth]="1370" [nzVisible]="visible" nzTitle="إستخراج طلب" (nzOnClose)="close()">
+  <form (ngSubmit)="submitForm()">
+   
+    <br />
+    <br />
+    <label class="label">رقم او اسم الطالب:</label>
+    <div class="input-group-icon">
+      <input nz-input class="input--style-4 js-datepicker" style="width: 35%" type="text" [(ngModel)]="studant"
+        name="studant" (ngModelChange)="onChange($event)" [nzAutocomplete]="auto" />
+      <nz-autocomplete #auto>
+        <nz-auto-option (click)="searchcomplete()" *ngFor="let option of options" [nzValue]="option.value" [nzLabel]="option.label">
+          {{ option.label }}</nz-auto-option>
+      </nz-autocomplete>
+    </div>
+    <br />
+    <nz-card>
+    <div style="margin-left: auto;">
+      <label class="label">نوع الطلب:</label>
+      <br />
+      <nz-radio-group [(ngModel)]="request" name="request" [ngModelOptions]="{standalone: true}">
+        <label nz-radio [ngStyle]="style" nzValue="unfreezeStatement">فك تجميد</label>
+        <label nz-radio [ngStyle]="style" nzValue="certficateStatement">شهادة قيد</label>
+        <label nz-radio [ngStyle]="style" nzValue="lateRegistrateStatement">تسجيل متأخر</label>
+        <label nz-radio [ngStyle]="style" nzValue="recorrection">إعادة تصحيح</label>
+        <label nz-radio [ngStyle]="style" nzValue="failureRemovalStatement">إزالة رسوب</label>
+        <label nz-radio [ngStyle]="style" nzValue="cardReplacementStatement">بدل فاقد للبطاقة</label>
+        <label nz-radio [ngStyle]="style" nzValue="detailStatement">شهادات تفاصيل</label>
+        <label nz-radio [ngStyle]="style" nzValue="graduationCertificateStatement">شهادات تخرج ( ورق مؤمن )</label>
+        <label nz-radio [ngStyle]="style" nzValue="graduationCertificateStatement2">شهادات تخرج ( نسخة كرتونية )</label>
+      </nz-radio-group>
+     
+     
+        <br />
+      </div>
+    <br />
+    <div class="input-group-icon">
+      <label class="label">المبلغ</label>
+      <input nz-input class="input--style-4 js-datepicker"[(ngModel)]="amount" type="text" name="amount" />
+      </div>
+ 
+ 
+    <nz-descriptions *ngIf="student" [nzColumn]="2" nzTitle=" بيانات الطالب">
+      <nz-descriptions-item nzTitle="اسم الطالب" [nzSpan]="1">
+        {{ student.arabicFullName || "" }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الرقم الجامعي " [nzSpan]="1">
+        {{ student.collegeNumber }}
+      </nz-descriptions-item>
+      
+      <nz-descriptions-item nzTitle="البرنامج" [nzSpan]="1">
+        {{ student.program || "" }}
+      </nz-descriptions-item>
+      
+      <nz-descriptions-item nzTitle="المستوى" [nzSpan]="2">
+        {{ student.class || "" }}
+      </nz-descriptions-item>
+      
+    </nz-descriptions>
+    
+  </nz-card>
+  {{ this.validateForm.controls["StudentId"].value }}
+  
+  <nz-table #expandTable [nzData]="extratransaction">
+    <thead>
+      <tr>
+        <th>نوع الرسوم</th>
+        <th>رقم الايصال</th>
+        <th>تاريخ الايصال</th>
+        <th>المبلغ</th>
+        <th>طباعة</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of extratransaction">
+        <td>{{ data.PaymentType }}</td>
+        <td>{{ data.StatmentNumber }}</td>
+        <td>{{ data.created_at  | date: "yyyy-MM-dd" }}</td>
+        <td>{{ data.amount }}</td>
+        <td>
+            <button type="button" nz-button [nzType]="'default'" (click)="printInvoice(data.id,data.PaymentName)">
+              طباعة
+            </button>
+          </td>
+        
+      </tr>
+    </tbody>
+  </nz-table>
+  
+  
+    <br />
+    <button (click)="SubmitPayment()" nz-button class="login-form-button" [nzType]="'primary'">
+      تاكيد
+    </button>
+  </form>
+  <div class="footer">
+    <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;">
+      <span>إلغاء</span>
+    </button>
+  </div>
+  </nz-drawer>
+  
+  
+  
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+      <thead>
+        <tr>
+          <th>اسم الطالب</th>
+          <th>الجنسية</th>
+          <th>نوع الشهادة</th>
+          <th>تاريخ التقديم</th>
+          <th>البرنامج</th>
+          <th>المستوى</th>
+          <th>العام الدراسي</th>
+          <th>الحالة</th>
+          <th>العمليات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of StudantsData">
+          <td>{{ data.arabicFullName }}</td>
+          <td>{{ data.nationality }}</td>
+          <td>{{ data.CertType }}</td>
+          <td>{{ data.applyDate }}</td>
+          <td>{{ data.program }}</td>
+          <td>{{ data.class }}</td>
+          <td>{{ data.stdYear }}</td>
+          <td>{{ data.status }}</td>
+          <td><a (click)="showStudent(data.id)">عرض</a></td>
+        </tr>
+      </tbody>
+    </table>
+    

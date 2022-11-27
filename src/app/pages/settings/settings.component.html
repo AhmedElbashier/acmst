@@ -1,0 +1,81 @@
+<nz-card style="width:1350px;" nzTitle=" الإعدادات" [nzExtra]="extraTemplate">
+  <div nz-row [nzGutter]="20">
+    <div nz-col [nzSpan]="5">
+      <button nzIcon="appstore" nz-button nzType="primary" (click)="open()">
+        المستخدمين
+      </button>
+    </div>
+
+    <div nz-col [nzSpan]="5">
+      <button nz-button nzType="primary" (click)="open1()">السمستر</button>
+    </div>
+
+    <div nz-col [nzSpan]="5">
+      <button nz-button nzType="primary" (click)="open2()">الأقساط</button>
+    </div>
+
+    <div nz-col [nzSpan]="5">
+      <button nz-button nzType="primary" (click)="open3()">الرسوم</button>
+    </div>
+  </div>
+</nz-card>
+
+
+<nz-drawer [nzClosable]="false" [nzVisible]="visible1" nzPlacement="right" [nzWidth]="1500" (nzOnClose)="close1()">
+  <nz-card style="width:1300px;" nzTitle=" السمستر" [nzExtra]="extraTemplate">
+    <br />
+    <label> الأول: </label>
+    <label> الثاني: </label>
+  </nz-card>
+
+  <nz-table #columnTable [nzData]="listOfData" [nzScroll]="{ x: '1100px' }">
+    <thead>
+      <tr>
+        <th nzWidth="10px" nzLeft="10px">الأول</th>
+        <th nzWidth="15px" nzLeft="15px">الثاني</th>
+      </tr>
+    </thead>
+  </nz-table>
+
+  <button type="button" (click)="close1()" class="ant-btn ant-btn-primary">
+    <span>إغلاق</span>
+  </button>
+</nz-drawer>
+
+<nz-drawer [nzClosable]="false" [nzVisible]="visible2" nzPlacement="right" [nzWidth]="1500" (nzOnClose)="close2()">
+  <nz-card style="width:1300px;" nzTitle=" الأقساط" [nzExtra]="extraTemplate">
+    <label> العام الدراسي: </label>
+    <nz-select style="width:200px;" nzShowSearch nzAllowClear class="select" nzAllowClear>
+      <nz-option nzValue="2016-2015" nzLabel="2016-2015"></nz-option>
+      <nz-option nzValue="2016-2017" nzLabel="2016-2017"></nz-option>
+      <nz-option nzValue="2017-2018" nzLabel="2017-2018"></nz-option>
+      <nz-option nzValue="2018-2019" nzLabel="2018-2019"></nz-option>
+      <nz-option nzValue="2019-2020" nzLabel="2019-2020"></nz-option>
+      <nz-option nzValue="2020-2021" nzLabel="2020-2021"></nz-option>
+      <nz-option nzValue="2021-2022" nzLabel="2021-2022"></nz-option>
+      <nz-option nzValue="2022-2023" nzLabel="2022-2023"></nz-option>
+      <nz-option nzValue="2023-2024" nzLabel="2023-2024"></nz-option>
+      <nz-option nzValue="2024-2025" nzLabel="2020-2021"></nz-option>
+      <nz-option nzValue="2025-2026" nzLabel="2021-2022"></nz-option>
+      <nz-option nzValue="2026-2027" nzLabel="2022-2023"></nz-option>
+      <nz-option nzValue="2027-2028" nzLabel="2023-2024"></nz-option>
+    </nz-select>
+
+    <label> عدد الأقساط: </label>
+    <nz-select style="width:200px;" nzShowSearch nzAllowClear class="select" nzAllowClear>
+      <nz-option nzValue="2" nzLabel="2"></nz-option>
+      <nz-option nzValue="4" nzLabel="4"></nz-option>
+    </nz-select>
+  </nz-card>
+  <nz-table #columnTable [nzData]="listOfData" [nzScroll]="{ x: '1100px' }">
+    <thead>
+      <tr>
+        <th nzWidth="10px" nzLeft="1px">العام الدراسي</th>
+        <th nzWidth="15px" nzLeft="20px">عدد الأقساط</th>
+      </tr>
+    </thead>
+  </nz-table>
+  <button type="button" (click)="close2()" class="ant-btn ant-btn-primary">
+    <span>إغلاق</span>
+  </button>
+</nz-drawer>

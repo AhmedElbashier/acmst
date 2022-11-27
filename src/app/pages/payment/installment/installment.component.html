@@ -1,0 +1,269 @@
+<!-- <div nz-row [nzGutter]="24">
+  <div nz-col [nzSpan]="20"></div>
+  <div nz-col [nzSpan]="4">
+    <button nz-button nzType="primary" (click)="open()">إضافة</button>
+  </div>
+</div> -->
+
+<nz-drawer [nzBodyStyle]="{
+    height: 'calc(100% - 55px)',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }" [nzMaskClosable]="false" [nzWidth]="1400" [nzVisible]="visible" nzTitle="Create" (nzOnClose)="close()">
+  <nz-drawer [nzVisible]="visibleCheck" [nzClosable]="false" (nzOnClose)="closeCheck()" [nzWidth]="1550">
+    <nz-descriptions *ngIf="studant" [nzColumn]="2" nzTitle=" بيانات الطالب">
+      <nz-descriptions-item nzTitle="الرقم الجامعي " [nzSpan]="1">
+        {{ studant.collegeNumber }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="اسم الطالب" [nzSpan]="1">
+        {{ studant.arabicFullName || "" }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="البرنامج" [nzSpan]="1">
+        {{ studant.program || "" }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="نوع العملة" [nzSpan]="1">
+        {{ studant.currency || "" }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="المستوى" [nzSpan]="2">
+        {{ studant.class || "" }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="نوع الدفعية" [nzSpan]="2">
+        {{ validateForm.controls["PaymentMethod"].value || "" }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="القيمة" [nzSpan]="2">
+        <span *ngIf="studant.currency == 'جنيه'">{{
+          validateForm.controls["amount"].value | currency: "SDG "
+        }}</span>
+        <span *ngIf="studant.currency == 'دولار'">{{
+          validateForm.controls["amount"].value | currency: "$"
+        }}</span>
+      </nz-descriptions-item>
+      <nz-descriptions-item *ngIf="validateForm.controls['StatmentNumber'].value" nzTitle="رقم الاشعار" [nzSpan]="2">
+        {{ validateForm.controls["StatmentNumber"].value || "" }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="تاريخ الاشعار" [nzSpan]="2">
+        {{
+          validateForm.controls["StatmentDate"].value | date: "yyyy-MM-dd H:mm"
+        }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+    <button type="button" nz-button [nzType]="'default'" (click)="closeCheck()">
+      الغاء
+    </button>
+    <button type="button" nz-button [nzType]="'primary'" (click)="submitForm()">
+      حفظ
+    </button>
+  </nz-drawer>
+  <div nz-row [nzGutter]="24">
+    <div nz-col [nzSpan]="14">
+      <div *ngIf="
+          isStringNumber(validateForm.controls['StudentId'].value) &&
+          validateForm.controls['StudentId'].value != null && account != 'undefined'
+        ">
+        <nz-descriptions [nzColumn]="2" nzTitle=" بيانات الطالب">
+          <nz-descriptions-item nzTitle="الرقم الجامعي " [nzSpan]="1">
+            {{ account.collegeNumber }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="اسم الطالب" [nzSpan]="1">
+            {{ account.arabicFullName }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="البرنامج" [nzSpan]="1">
+            {{ account.program }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="الفصل الدراسي" [nzSpan]="1">
+            {{ account.semester }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="نوع العملة" [nzSpan]="1">
+            {{ account.currency }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="المستوى" [nzSpan]="1">
+            {{ account.class }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="رسوم الطالب" [nzSpan]="1">
+            {{ account.tolls  }} + {{ account.registration }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="المودع لدى الكلية" [nzSpan]="1">
+            {{ account.amount }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="المتبقي من الرسوم" [nzSpan]="1">
+            {{ account.left }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="العام الدراسي" [nzSpan]="2">
+            {{ account.stdYear }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="سنة القبول" [nzSpan]="1">
+            {{ account.applyDate }}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="نوع المنحة/التخفيض" [nzSpan]="2">
+            {{ account.scolarshipType}}
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="نسبة التخفيض" [nzSpan]="2">
+            {{ 100 - (account.scolarship * 100) }}%
+          </nz-descriptions-item>
+          <nz-descriptions-item nzTitle="" [nzSpan]="1">
+            <label class="label">السنة:</label>
+            <nz-select [(ngModel)]="selectedYear" class="select" style="width: 130px;">
+              <nz-option *ngFor="let y of years" nzValue="{{ y }}" nzLabel="{{ y }}"></nz-option>
+            </nz-select>
+            <button type="button" (click)="printStatment(studant.id)" class="ant-btn" style="margin-right: 8px;">
+              <span>طباعة كشف الحساب</span>
+            </button>
+          </nz-descriptions-item>
+        </nz-descriptions>
+
+        <nz-table #expandTable [nzData]="paymen">
+          <thead>
+            <tr>
+              <th>نوع الرسوم</th>
+              <th>رقم الايصال</th>
+              <th>تاريخ الايصال</th>
+              <th>المبلغ</th>
+              <th>طباعة</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let data of paymen">
+              <td>{{ data.PaymentType }}</td>
+              <td>{{ data.StatmentNumber }}</td>
+              <td>{{ data.created_at  | date: "yyyy-MM-dd" }}</td>
+              <td>{{ data.amount }}</td>
+              <td>
+                <button type="button" nz-button [nzType]="'default'" (click)="printInvoice(data.id)">
+                  طباعة
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+
+        <nz-table #expandTable [nzData]="transaction">
+          <thead>
+            <tr>
+              <th>رقم الاشعار</th>
+              <th>تاريخ الاشعار</th>
+              <th>المبلغ</th>
+              <th>المتبقي</th>
+              <th>طباعة</th>
+            </tr>
+          </thead>
+
+          <tbody>
+            <tr *ngFor="let data of transaction">
+              <td>{{ data.id }}</td>
+              <td>{{ data.StatmentDate}}</td>
+              <td>{{ data.amount }}</td>
+              <td>{{ data.leftover }}</td>
+              <td>
+                <button type="button" nz-button [nzType]="'default'" (click)="printTransaction(data.id)">
+                  طباعة
+                </button>
+              </td>
+            </tr>
+          </tbody>
+        </nz-table>
+      </div>
+    </div>
+    <div nz-col [nzSpan]="4"></div>
+    <div nz-col [nzSpan]="6">
+      <form (ngSubmit)="submitForm()" [formGroup]="validateForm">
+        <label class="label">الدفعيات:</label>
+        <br />
+        <br />
+        <label class="label">رقم او اسم الطالب:</label>
+        <div class="input-group-icon">
+          <input nz-input type="text" formControlName="StudentId" (ngModelChange)="onChange($event)"
+            [nzAutocomplete]="auto" />
+          <nz-autocomplete #auto>
+            <nz-auto-option (click)="getAcccountData()" *ngFor="let option of options" [nzValue]="option.value"
+              [nzLabel]="option.label">
+              {{ option.label }}</nz-auto-option>
+          </nz-autocomplete>
+        </div>
+        <br />
+        <label class="label">نوع الدفعية :</label>
+        <div>
+          <nz-radio-group formControlName="PaymentMethod">
+            <label nz-radio [ngStyle]="style" nzValue="نقدي">نقدي</label>
+            <label nz-radio [ngStyle]="style" nzValue="بنكي">إيداع بنكي</label>
+          </nz-radio-group>
+        </div>
+        <br />
+        <label class="label">المبلغ:</label>
+        <div class="input-group-icon">
+          <input nz-input class="input--style-4 js-datepicker" type="text" formControlName="amount" />
+          <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+        </div>
+        <br />
+        <br />
+        <label class="label">تاريخ الإشعار :</label>
+        <div class="input-group-icon">
+          <nz-form-item>
+            <nz-form-control>
+              <nz-date-picker [nzFormat]="YYYY - MM - DD" formControlName="StatmentDate"></nz-date-picker>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <br />
+        <div *ngIf="isHidden()">
+          <label class="label">رقم الاشعار:</label>
+          <div class="input-group-icon">
+            <input nz-input class="input--style-4 js-datepicker" type="text" formControlName="StatmentNumber" />
+            <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+          </div>
+
+          <br />
+        </div>
+        <nz-form-item>
+          <nz-form-label>ملاحظات</nz-form-label>
+          <nz-form-control>
+            <textarea formControlName="Notes" nz-input rows="2" placeholder=""></textarea>
+          </nz-form-control>
+        </nz-form-item>
+
+        <br />
+        <br />
+      </form>
+    </div>
+  </div>
+
+  <div class="footer">
+    <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;">
+      <span>الغاء</span>
+    </button>
+    <button nz-button [nzType]="'primary'" (click)="check()" class="ant-btn" style="margin-right: 8px;">
+      <span>مراجعة</span>
+    </button>
+  </div>
+</nz-drawer>
+
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>رقم الايصال</th>
+      <th>اسم الطالب</th>
+      <th>نوع الدفعية</th>
+      <th>المبلغ </th>
+      <th>المودع لدى الكلية</th>
+      <th>الإشعار</th>
+      <th>تاريخ الأشعار</th>
+      <th>طباعة</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of transactions">
+      <td>{{ data.ReceiptNumber }}</td>
+      <td>{{ data.stdName }}</td>
+      <td>{{ data.PaymentMethod }}</td>
+      <td>{{ data.amount }}</td>
+      <td>{{ data.leftover }}</td>
+      <td>{{ data.StatmentNumber }}</td>
+      <td>{{ data.StatmentDate }}</td>
+      <td>
+        <button type="button" nz-button [nzType]="'default'" (click)="printInvoice(data.id)">
+          طباعة
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>

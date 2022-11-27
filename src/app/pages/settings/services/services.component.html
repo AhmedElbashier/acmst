@@ -1,0 +1,63 @@
+
+
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" [nzWidth]="1500" (nzOnClose)="close()">
+
+  <nz-card style="width:1300px;" nzIcon="appstore" nzTitle=" إضافة خدمة" [nzExtra]="extraTemplate">
+    <form [formGroup]="userForm">
+      <div nz-row [nzGutter]="20">
+        <div nz-col [nzSpan]="7"></div>
+        <div nz-col [nzSpan]="5">
+          <label>المبلغ المخصص للخدمة: </label>
+          <input nz-input="SDG" style="width:120px" formControlName="price" placeholder="" tabindex="3" />
+        </div>
+
+        <div nz-col [nzSpan]="5">
+          <label>نوع الخدمة: </label>
+          <input nz-input="SDG" style="width:120px" formControlName="type" placeholder="" tabindex="2" />
+        </div>
+
+        <div nz-col [nzSpan]="7">
+          <label> إسم الخدمة: </label>
+          <input nz-input="SDG" style="width:240px" formControlName="name" placeholder="" tabindex="1" />
+        </div>
+        
+        <div nz-col [nzSpan]="2">
+          <label> مدير الخدمة: </label>
+          <input nz-input="SDG" style="width:240px" formControlName="department" placeholder="" tabindex="1" />
+        </div>
+      </div>
+    </form>
+    <br />
+   </nz-card> 
+ 
+  <div class="footer">
+    <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;">
+      <span>اغلاق</span>
+    </button>
+    <button type="button" (click)="submitServices()" class="ant-btn ant-btn-primary">
+      <span>حفظ</span>
+    </button>
+  </div>
+</nz-drawer>
+
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>إسم الخدمة</th>
+      <th>نوع الخدمة</th>
+      <th>مدير الخدمة</th>
+      <th>المبلغ المخصص للخدمة</th>
+      <th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let service of services">
+      <td>{{ service.name }}</td>
+      <td>{{ service.type }}</td>
+      <td>{{ service.department }}</td>
+      <td>{{ service.price }}</td>
+
+      <td><a (click)="editService(service)">تعديل</a></td>
+    </tr>
+  </tbody>
+</table>

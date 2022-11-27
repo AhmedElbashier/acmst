@@ -1,0 +1,97 @@
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>السنة</th>
+      <th>البرنامج</th>
+      <th>الأقساط</th>
+      <th>الرسوم الدراسية</th>
+      <th>رسوم التسجيل</th>
+      <th>العملة</th>
+      <th>التعديل</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of tolls">
+      <td>{{ data.year }}</td>
+      <td>{{ data.program }}</td>
+      <td>{{ data.LoanNumber }}</td>
+      <td>{{ data.amount }}</td>
+      <td>{{ data.registration }}</td>
+      <td>{{ data.currency }}</td>
+      <td><a (click)="editToll(data.id)">تعديل</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" [nzWidth]="1500" (nzOnClose)="close()">
+  <div nz-row [nzGutter]="24">
+    <nz-card nzTitle=" الرسوم" [nzExtra]="extraTemplate">
+      <div nz-col [nzSpan]="9"></div>
+      <div nz-col [nzSpan]="5">
+        <label>السنة: </label>
+        <input [(ngModel)]="toll.year" nz-input style="width:120px" placeholder="" tabindex="" />
+      </div>
+
+      <div nz-col [nzSpan]="5">
+        <label>الرسوم الدراسية: </label>
+        <input [(ngModel)]="toll.amount" nz-input style="width:120px" placeholder="" tabindex="" />
+      </div>
+
+      <div nz-col [nzSpan]="5">
+        <label>رسوم التسجيل: </label>
+        <input [(ngModel)]="toll.registration" nz-input style="width:120px" placeholder="" tabindex="" />
+      </div>
+    </nz-card>
+  </div>
+
+  <div nz-row [nzGutter]="24">
+    <nz-card z [nzExtra]="extraTemplate">
+      <div nz-col [nzSpan]="6"></div>
+
+      <div nz-col [nzSpan]="8">
+        <label class="label">البرنامج:</label>
+        <nz-select [(ngModel)]="toll.program" style="width:280px;">
+          <nz-option nzValue="برنامج الطب والجراحة" nzLabel="برنامج الطب والجراحة"></nz-option>
+          <nz-option nzValue="برنامج طب الاسنان" nzLabel="برنامج طب الاسنان"></nz-option>
+          <nz-option nzValue="برنامج علوم المختبرات الطبية" nzLabel="برنامج علوم المختبرات الطبية"></nz-option>
+          <nz-option nzValue="برنامج الصيدلة" nzLabel="برنامج الصيدلة"></nz-option>
+          <nz-option nzValue="برنامج العمارة" nzLabel="برنامج العمارة"></nz-option>
+          <nz-option nzValue="برنامج الهندسة المدنية" nzLabel="برنامج الهندسة المدنية"></nz-option>
+          <nz-option nzValue="برنامج الهندسة الكهربائية والالكترونية" nzLabel="برنامج الهندسة الكهربائية والالكترونية">
+          </nz-option>
+          <nz-option nzValue="برنامج تقانة المعلومات" nzLabel="برنامج تقانة المعلومات"></nz-option>
+          <nz-option nzValue="برنامج الاقتصاد والدراسات المصرفية" nzLabel="برنامج الاقتصاد والدراسات المصرفية">
+          </nz-option>
+          <nz-option nzValue="برنامج العلوم الادارية" nzLabel="برنامج العلوم الادارية"></nz-option>
+        </nz-select>
+      </div>
+
+      <div nz-col [nzSpan]="5">
+        <label> عدد الأقساط: </label>
+        <nz-select [(ngModel)]="toll.LoanNumber" style="width:100px;" nzShowSearch nzAllowClear class="select"
+          nzAllowClear>
+          <nz-option nzValue="2" nzLabel="2"></nz-option>
+          <nz-option nzValue="4" nzLabel="4"></nz-option>
+        </nz-select>
+      </div>
+
+      <div nz-col [nzSpan]="5">
+        <label> العملة: </label>
+        <nz-select [(ngModel)]="toll.currency" style="width:100px;" nzShowSearch nzAllowClear class="select"
+          nzAllowClear>
+          <nz-option nzValue="جنيه" nzLabel="جنيه"></nz-option>
+          <nz-option nzValue="دولار" nzLabel="دولار"></nz-option>
+        </nz-select>
+      </div>
+    </nz-card>
+  </div>
+
+  <div class="footer">
+    <button type="button" (click)="close3()" class="ant-btn" style="margin-right: 8px;">
+      <span>اغلاق</span>
+    </button>
+    <button type="button" (click)="submitTolls()" class="ant-btn ant-btn-primary">
+      <span>حفظ</span>
+    </button>
+  </div>
+</nz-drawer>

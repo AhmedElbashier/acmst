@@ -1,0 +1,109 @@
+<div nz-row [nzGutter]="24">
+  <div nz-col [nzSpan]="5"></div>
+  <div nz-col [nzSpan]="15">
+    <input nz-input style="width: 89%" class="input--style-4 js-datepicker" type="text" name=""
+      placeholder="بحث الإسم/الرقم" />
+  </div>
+  <div nz-col [nzSpan]="4">
+    <button nz-button nzType="primary" (click)="open()">إضافة</button>
+  </div>
+</div>
+
+<nz-table #filterTable [nzSize]="small" [nzData]="StudantsData">
+  <thead (nzSortChange)="sort($event)" nzSingleSort>
+    <tr>
+      <th nzShowCheckbox [(nzChecked)]="isAllDisplayDataChecked" [nzIndeterminate]="isIndeterminate"
+        (nzCheckedChange)="checkAll($event)"></th>
+      <th nzShowSort nzSortKey="collegeNumber">الرقم الجامعي</th>
+      <th nzShowSort nzSortKey="arabicFullName">
+        إسم الطالب
+      </th>
+      <th nzShowSort nzSortKey="program">البرنامج</th>
+      <th nzShowSort nzSortKey="class">المستوى</th>
+      <th nzShowSort>طباعة</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of StudantsData">
+      <td nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id]"></td>
+      <td>{{ data.collegeNumber }}</td>
+      <td>{{ data.arabicFullName }}</td>
+      <td>{{ data.program }}</td>
+      <td>{{ data.class }}</td>
+      <td>
+        <button nz-button nzType="primary" (click)="printCard(data.id)">طباعة</button>
+      </td>
+    </tr>
+  </tbody>
+</nz-table>
+
+
+<nz-drawer [nzBodyStyle]="{
+  height: 'calc(100% - 55px)',
+  overflow: 'auto',
+  'padding-bottom': '53px'
+}" [nzMaskClosable]="false" [nzWidth]="720" [nzVisible]="visible" nzTitle="Create" (nzOnClose)="close()">
+  <label class="label">رقم او اسم الطالب:</label>
+  <div class="input-group-icon">
+    <input nz-input type="text" [(ngModel)]="StudentId" (ngModelChange)="onChange($event)" [nzAutocomplete]="auto" />
+    <nz-autocomplete #auto>
+      <nz-auto-option *ngFor="let option of options" [nzValue]="option.value" [nzLabel]="option.label">
+        {{ option.label }}</nz-auto-option>
+    </nz-autocomplete>
+  </div>
+  <!-- <form nz-form>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label>البرنامج</nz-form-label>
+        <nz-form-control>
+          <input type="text" nz-input placeholder="البرنامج" />
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+    <div nz-col nzSpan="12">
+      <label class="label">رقم او اسم الطالب:</label>
+      <div class="input-group-icon">
+        <input nz-input type="text" [(ngModel)]="StudentId" (ngModelChange)="onChange($event)"
+          [nzAutocomplete]="auto" />
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of options" [nzValue]="option.value" [nzLabel]="option.label">
+            {{ option.label }}</nz-auto-option>
+        </nz-autocomplete>
+      </div>
+    </div>
+  </div>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="12"></div>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label>المستوى</nz-form-label>
+        <nz-form-control>
+          <nz-input-group>
+            <input type="text" nz-input placeholder="المستوى" />
+          </nz-input-group>
+        </nz-form-control>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="12"></div>
+    <div nz-col nzSpan="12">
+      <nz-form-item>
+        <nz-form-label>التاريخ</nz-form-label>
+      </nz-form-item>
+    </div>
+  </div>
+  <div nz-row nzGutter="8">
+    <div nz-col nzSpan="24"></div>
+  </div>
+</form> -->
+  <div class="footer">
+    <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;">
+      <span>إلغاء</span>
+    </button>
+    <button type="button" (click)="printCard()" class="ant-btn ant-btn-primary">
+      <span>طباعة</span>
+    </button>
+  </div>
+</nz-drawer>

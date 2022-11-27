@@ -1,0 +1,47 @@
+<div nz-row [nzGutter]="24">
+  <div nz-col [nzSpan]="5"></div>
+  <div nz-col [nzSpan]="15">
+    <input nz-input style="width: 89%" [ngModel]="studant" (ngModelChange)="search($event)"
+      class="input--style-4 js-datepicker" type="text" name="" placeholder="بحث الإسم/الرقم" />
+  </div>
+  <div nz-col [nzSpan]="4"></div>
+</div>
+<button nz-button nzType="primary" (click)="action()" *ngIf="Selection()">
+  أعتماد الكل
+</button>
+<form>
+  <nz-table #filterTable [nzSize]="small" [nzData]="StudantsData" [nzTotal]="total" [(nzPageIndex)]="pageIndex"
+    [(nzPageSize)]="pageSize">
+    <thead (nzSortChange)="sort($event)" nzSingleSort>
+      <tr>
+        <th nzShowCheckbox [(nzChecked)]="isAllDisplayDataChecked" [nzIndeterminate]="isIndeterminate"
+          (nzCheckedChange)="checkAll($event)"></th>
+        <th nzShowSort nzSortKey="collegeNumber">الرقم الجامعي</th>
+        <th nzShowSort nzSortKey="arabicFullName">
+          الطالب
+        </th>
+        <th nzShowSort nzSortKey="nationality">الجنسية</th>
+        <th nzShowSort nzSortKey="applyDate">
+          تاريخ التقديم
+        </th>
+        <th nzShowSort nzSortKey="program">البرنامج</th>
+        <th nzShowSort>اعتماد</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let data of DisplayData">
+        <td nzShowCheckbox [(nzChecked)]="mapOfCheckedId[data.id]"></td>
+        <td>{{ data.collegeNumber }}</td>
+        <td>{{ data.arabicFullName }}</td>
+        <td>{{ data.nationality }}</td>
+        <td>{{ data.applyDate }}</td>
+        <td>{{ data.program }}</td>
+        <td>
+          <button nz-button nzType="primary" (click)="action(data.id)">اعتماد</button>
+        </td>
+      </tr>
+    </tbody>
+  </nz-table>
+  <!-- {{ this.table.rows({ selected: true }).data() | json }} -->
+
+</form>

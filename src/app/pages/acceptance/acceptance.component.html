@@ -1,0 +1,526 @@
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>الرقم الجامعي</th>
+      <th>اسم الطالب</th>
+      <th>البرنامج</th>
+      <th>العام الدراسي</th>
+      <th>تاريخ القبول</th>
+      <th>نوع القبول</th>
+      <th>الحالة</th>
+      <th>تعديل</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of StudantsData">
+      <td>{{ data.collegeNumber }}</td>
+      <td>{{ data.arabicFullName }}</td>
+      <td>{{ data.program }}</td>
+      <td>{{ data.stdYear }}</td>
+      <td>{{ data.applyDate }}</td>
+      <td>{{ data.academicStand }}</td>
+      <td>{{ data.status }}</td>
+      <td><a (click)="editStudant(data.id)">تعديل</a></td>
+    </tr>
+  </tbody>
+</table>
+<nz-drawer [nzBodyStyle]="{
+  height: 'calc(100% - 55px)',
+  overflow: 'auto',
+  'padding-bottom': '53px'
+}" [nzMaskClosable]="false" [nzWidth]="1500" (nzOnClose)="closeCheck()" [nzVisible]="visibleNew" nzTitle=""
+  style="text-align: center" [nzClosable]="false">
+  <button nz-button (click)="reset()" class="login-form-button" [nzType]="'primary'">
+    مسح البينات
+  </button>
+  <form lang="ar" nz-form [formGroup]="validateForm" (ngSubmit)="submitForm()">
+    <div nz-row [nzGutter]="24">
+      <div nz-col [nzSpan]="4"></div>
+      <div nz-col [nzSpan]="10">
+        <ng-container *ngIf="!validateForm.controls['pic'].value">
+          <i class="upload-icon" nz-icon (click)="handleChange()" [nzType]="loading ? 'loading' : 'plus'"></i>
+          <div class="ant-upload-text">رفع الصورة</div>
+        </ng-container>
+        <img *ngIf="validateForm.controls['pic'].value" (click)="handleChange()"
+          [src]="validateForm.controls['pic'].value" class="avatar" />
+      </div>
+    </div>
+
+    <br />
+    <label class="label">نوع القبول:</label>
+    <br />
+    <br />
+    <div>
+      <nz-radio-group formControlName="academicStand">
+        <label nz-radio [ngStyle]="style" nzValue="قبول نظامي">قبول نظامي (المستوى الاول)</label>
+        <label nz-radio [ngStyle]="style" nzValue="تحويل">تحويل</label>
+        <label nz-radio [ngStyle]="style" nzValue="تجسير">تجسير</label>
+        <label nz-radio [ngStyle]="style" nzValue="ناضجين">ناضجين</label>
+        <label nz-radio [ngStyle]="style" nzValue="حملة درجات علمية">حملة درجات علمية</label>
+      </nz-radio-group>
+    </div>
+    <br />
+    <br />
+    <nz-card style="width:100%;" nzTitle=" بيانات الطالب" [nzExtra]="extraTemplate">
+      <label class="label"> الإسم رباعي باللغة العربية:</label>
+      <label class="label"></label>
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="5"></div>
+        <div nz-col [nzSpan]="5">
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <input nz-input formControlName="arName4" placeholder="" tabindex="4" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="5">
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <input nz-input formControlName="arName3" placeholder="" tabindex="3" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="5">
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <input nz-input formControlName="arName2" placeholder="" tabindex="2" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <input nz-input formControlName="arName1" placeholder="" tabindex="1" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <label class="label"></label>
+      <div class="right" nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="12"></div>
+        <div nz-col [nzSpan]="4">
+          <label class="label">الجنسية:</label>
+          <nz-select nzShowSearch nzAllowClear class="select" formControlName="nationality">
+            <nz-option *ngFor="let item of nationalities" [nzValue]="item.label" [nzLabel]="item.label">
+            </nz-option>
+          </nz-select>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <label class="label">الديانة:</label>
+
+          <nz-select nzShowSearch nzAllowClear class="select" formControlName="religion" nzAllowClear>
+            <nz-option nzValue="مسلم" nzLabel="مسلم"></nz-option>
+            <nz-option nzValue="مسيحي" nzLabel="مسيحي"></nz-option>
+            <nz-option nzValue="اخرى" nzLabel="اخرى"></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <label class="label-en" left>النوع:</label>
+          <br />
+          <nz-radio-group formControlName="gender">
+            <label nz-radio [ngStyle]="style" nzValue="ذكر">ذكر</label>
+            <label nz-radio [ngStyle]="style" nzValue="أنثى">أنثى</label>
+          </nz-radio-group>
+        </div>
+      </div>
+      <div class="right" nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="15"></div>
+        <div nz-col [nzSpan]="5">
+          <label class="label">رقمها:</label>
+          <div class="input-group-icon">
+            <input nz-input type="text" formControlName="pvNumber" />
+            <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+          </div>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <label class="label">وثيقة إثبات الشخصية:</label>
+          <nz-select nzShowSearch nzAllowClear formControlName="pvType" nzAllowClear nzPlaceHolder="">
+            <nz-option nzValue="الرقم الوطني" nzLabel="الرقم الوطني"></nz-option>
+            <nz-option nzValue="بطاقة قومية" nzLabel="بطاقة قومية"></nz-option>
+            <nz-option nzValue="جواز السفر" nzLabel="جواز السفر"></nz-option>
+          </nz-select>
+        </div>
+      </div>
+
+      <div class="right" nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="15"></div>
+        <div nz-col [nzSpan]="5">
+          <label class="label"> دولة الميلاد:</label>
+          <nz-select nzShowSearch nzAllowClear formControlName="birthCountry" nzAllowClear>
+            <nz-option *ngFor="let item of coutries" [nzValue]="item.label" [nzLabel]="item.label"></nz-option>
+          </nz-select>
+        </div>
+
+        <div nz-col [nzSpan]="4">
+          <label class="label">تاريخ الميلاد :</label>
+          <nz-form-item>
+            <nz-form-control>
+              <nz-date-picker [nzDateRender]="tplRender" formControlName="birthday">
+              </nz-date-picker>
+              <ng-template #tplRender let-current>
+                <div class="ant-calendar-date" [class.border]="current.getDate() === 1">
+                  {{ current.getDate() }}
+                </div>
+              </ng-template>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div class="right" nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="7"></div>
+
+        <div nz-col [nzSpan]="7">
+          <label class="label"> رقم الهاتف 2:</label>
+          <nz-form-item>
+            <nz-form-control [nzSm]="19" [nzXs]="24" [nzValidateStatus]="validateForm.controls['phoneNumber2']"
+              nzErrorTip="Please input your phone number!">
+              <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate2">
+                <input formControlName="phoneNumber2" id="'phoneNumber2'" nz-input />
+                <ng-template #addOnBeforeTemplate2>
+                  <nz-select nzAllowClear style="width:95px;" [(ngModel)]="sp2" [ngModelOptions]="{standalone: true}">
+                    <nz-option nzLabel="249+" nzValue="'+249'"></nz-option>
+                    <nz-option nzLabel="966+" nzValue="'+966'"></nz-option>
+                    <nz-option nzLabel="971+" nzValue="'+971'"></nz-option>
+                    <nz-option nzLabel="201+" nzValue="'+201'"></nz-option>
+                    <nz-option nzLabel="974+" nzValue="'+974'"></nz-option>
+                  </nz-select>
+                </ng-template>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="7">
+          <label class="label"> رقم الهاتف 1:</label>
+          <nz-form-item>
+            <nz-form-control [nzSm]="19" [nzXs]="24" [nzValidateStatus]="validateForm.controls['phoneNumber1']"
+              nzErrorTip="Please input your phone number!">
+              <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate1">
+                <input formControlName="phoneNumber1" id="'phoneNumber1'" nz-input />
+                <ng-template #addOnBeforeTemplate1>
+                  <nz-select style="width:95px;" [(ngModel)]="sp1" [ngModelOptions]="{standalone: true}">
+                    <nz-option nzLabel="249+" nzValue="'+249'"></nz-option>
+                    <nz-option nzLabel="966+" nzValue="'+966'"></nz-option>
+                    <nz-option nzLabel="971+" nzValue="'+971'"></nz-option>
+                    <nz-option nzLabel="201+" nzValue="'+201'"></nz-option>
+                    <nz-option nzLabel="974+" nzValue="'+974'"></nz-option>
+                  </nz-select>
+                </ng-template>
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="3">
+          <label class="label">العنوان:</label>
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <input style="width: 130%" nz-input formControlName="address" placeholder="" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+    </nz-card>
+    <nz-card style="width:100%;" nzTitle=" بيانات ولي الأمر" [nzExtra]="extraTemplate">
+      <label class="label"> إسم ولي الأمر رباعي:</label>
+      <label class="label"></label>
+      <div nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="5"></div>
+        <div nz-col [nzSpan]="5">
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <input nz-input formControlName="prName1" placeholder="" tabindex="20" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="5">
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <input nz-input formControlName="prName2" placeholder="" tabindex="19" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="5">
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <input nz-input formControlName="prName3" placeholder="" tabindex="18" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <nz-form-item nzFlex>
+            <nz-form-control>
+              <input nz-input formControlName="prName4" placeholder="" tabindex="17" />
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+      </div>
+
+      <div class="right" nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="4"></div>
+
+        <div nz-col [nzSpan]="7">
+          <label class="label">2 رقم الهاتف :</label>
+          <nz-form-item>
+            <nz-form-control [nzValidateStatus]="validateForm.controls['parentPhoneNumber2']"
+              nzErrorTip="Please input your phone number!">
+              <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate3">
+                <ng-template #addOnBeforeTemplate3>
+                  <nz-select class="phone-select" style="width:95px;" [(ngModel)]="pp2"
+                    [ngModelOptions]="{standalone: true}">
+                    <nz-option nzLabel="249+" nzValue="'+249'"></nz-option>
+                    <nz-option nzLabel="966+" nzValue="'+966'"></nz-option>
+                    <nz-option nzLabel="971+" nzValue="'+971'"></nz-option>
+                    <nz-option nzLabel="201+" nzValue="'+201'"></nz-option>
+                    <nz-option nzLabel="974+" nzValue="'+974'"></nz-option>
+                  </nz-select>
+                </ng-template>
+                <input formControlName="parentPhoneNumber2" id="parentPhoneNumber2" nz-input />
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="7">
+          <label class="label"> رقم الهاتف :</label>
+          <nz-form-item>
+            <nz-form-control [nzValidateStatus]="validateForm.controls['parentPhoneNumber1']"
+              nzErrorTip="Please input your phone number!">
+              <nz-input-group [nzAddOnBefore]="addOnBeforeTemplate4">
+                <input formControlName="parentPhoneNumber1" id="parentPhoneNumber1" nz-input />
+                <ng-template #addOnBeforeTemplate4>
+                  <nz-select class="phone-select" style="width:95px;" [(ngModel)]="pp1"
+                    [ngModelOptions]="{standalone: true}">
+                    <nz-option nzLabel="249+" nzValue="'+249'"></nz-option>
+                    <nz-option nzLabel="971+" nzValue="'+971'"></nz-option>
+                    <nz-option nzLabel="201+" nzValue="'+201'"></nz-option>
+                    <nz-option nzLabel="966+" nzValue="'+966'"></nz-option>
+                    <nz-option nzLabel="974+" nzValue="'+974'"></nz-option>
+                  </nz-select>
+                </ng-template>
+
+              </nz-input-group>
+            </nz-form-control>
+          </nz-form-item>
+        </div>
+
+        <div nz-col [nzSpan]="6">
+          <label class="label">صلة القرابة:</label>
+          <nz-form-control [nzValidateStatus]="validateForm.controls['phoneNumber']">
+            <input formControlName="relation" id="'phoneNumber'" nz-input tabindex="40" />
+          </nz-form-control>
+        </div>
+      </div>
+    </nz-card>
+
+
+    <nz-card style="width:100%" nzTitle=" بيانات موظف القبول" [nzExtra]="extraTemplate">
+
+      <div>
+        <label class="label">تاريخ التقديم:</label>
+        <nz-form-item>
+          <nz-form-label [nzSm]="8" [nzXs]="24"></nz-form-label>
+          <nz-form-control [nzSm]="16" [nzXs]="24" tyle="width:25%;">
+            <nz-date-picker formControlName="applyDate" style="width:25%" [nzDateRender]="tplRender"></nz-date-picker>
+            <ng-template #tplRender let-current>
+              <div class="ant-calendar-date" [class.border]="current.getDate() === 1">
+                {{ current.getDate() }}
+              </div>
+            </ng-template>
+          </nz-form-control>
+        </nz-form-item>
+      </div>
+
+      <div class="right" nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="10"></div>
+
+        <div nz-col [nzSpan]="5">
+          <label class="label">نوع الشهادة الثانوية:</label>
+
+          <nz-select nzShowSearch nzAllowClear formControlName="CertType" nzAllowClear nzPlaceHolder="">
+            <nz-option nzValue="سودانية" nzLabel="سودانية"></nz-option>
+            <nz-option nzValue="سودانية انجليزي" nzLabel="سودانية انجليزي"></nz-option>
+            <nz-option nzValue="عربية" nzLabel="عربية"></nz-option>
+            <nz-option nzValue="اجنبية" nzLabel="اجنبية"></nz-option>
+          </nz-select>
+        </div>
+        <div nz-col [nzSpan]="5">
+          <label class="label">الرقم الجامعي:</label>
+          <div class="input-group-icon">
+            <input nz-input class="input--style-4 js-datepicker" formControlName="collegeNumber" type="text" name="" />
+            <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+          </div>
+        </div>
+        <div nz-col [nzSpan]="4">
+          <label class="label">النسبة المؤوية:</label>
+
+          <input nz-input class="input--style-4 js-datepicker" formControlName="CertPercentage" type="text" name="" />
+        </div>
+      </div>
+      <div class="right" nz-row [nzGutter]="24">
+        <div nz-col [nzSpan]="9"></div>
+        <div *ngIf="validateForm.controls['academicStand'].value != 'قبول نظامي'" nz-col [nzSpan]="5">
+          <label>:السنة الدراسية للطالب</label>
+          <nz-select formControlName="class">
+            <nz-option nzValue="الاول" nzLabel="السنةالأولى"></nz-option>
+            <nz-option nzValue="الثاني" nzLabel="السنة الثانية"></nz-option>
+            <nz-option nzValue="الثالث" nzLabel="السنة الثالثة"></nz-option>
+            <nz-option nzValue="الرابع" nzLabel="السنة الرابعة"></nz-option>
+            <nz-option nzValue="الخامس" nzLabel="السنة الخامسة"></nz-option>
+          </nz-select>
+          <label class="label">بيانات المؤسسة السابقة</label>
+          <nz-form-control>
+            <input formControlName="oldCollege" nz-input tabindex="40" />
+          </nz-form-control>
+        </div>
+        <div nz-col [nzSpan]="5">
+          <label class="label">البرنامج:</label>
+
+          <nz-select nzShowSearch nzAllowClear formControlName="program" nzAllowClear nzPlaceHolder="إختيار">
+            <nz-option nzValue="برنامج الطب والجراحة" nzLabel="برنامج الطب والجراحة"></nz-option>
+            <nz-option nzValue="برنامج طب الاسنان" nzLabel="برنامج طب الاسنان"></nz-option>
+            <nz-option nzValue="برنامج علوم المختبرات الطبية" nzLabel="برنامج علوم المختبرات الطبية"></nz-option>
+            <nz-option nzValue="برنامج الصيدلة" nzLabel="برنامج الصيدلة"></nz-option>
+            <nz-option nzValue="برنامج العمارة" nzLabel="برنامج العمارة"></nz-option>
+            <nz-option nzValue="برنامج الهندسة المدنية" nzLabel="برنامج الهندسة المدنية"></nz-option>
+            <nz-option nzValue="برنامج الهندسة الكهربائية والالكترونية"
+              nzLabel="برنامج الهندسة الكهربائية والالكترونية">
+            </nz-option>
+            <nz-option nzValue="برنامج تقانة المعلومات" nzLabel="برنامج تقانة المعلومات"></nz-option>
+            <nz-option nzValue="برنامج الاقتصاد والدراسات المصرفية" nzLabel="برنامج الاقتصاد والدراسات المصرفية">
+            </nz-option>
+            <nz-option nzValue="برنامج العلوم الادارية" nzLabel="برنامج العلوم الادارية"></nz-option>
+          </nz-select>
+        </div>
+
+        <div nz-col [nzSpan]="5">
+          <label class="label">سنة الشهادة:</label>
+          <div>
+            <nz-select nzShowSearch nzAllowClear formControlName="year" nzAllowClear nzPlaceHolder="">
+
+              <nz-option nzValue="2000" nzLabel="2000"></nz-option>
+              <nz-option nzValue="2001" nzLabel="2001"></nz-option>
+              <nz-option nzValue="2002" nzLabel="2002"></nz-option>
+              <nz-option nzValue="2003" nzLabel="2003"></nz-option>
+              <nz-option nzValue="2004" nzLabel="2004"></nz-option>
+              <nz-option nzValue="2005" nzLabel="2005"></nz-option>
+              <nz-option nzValue="2006" nzLabel="2006"></nz-option>
+              <nz-option nzValue="2007" nzLabel="2007"></nz-option>
+              <nz-option nzValue="2008" nzLabel="2008"></nz-option>
+              <nz-option nzValue="2009" nzLabel="2009"></nz-option>
+              <nz-option nzValue="2010" nzLabel="2010"></nz-option>
+              <nz-option nzValue="2011" nzLabel="2011"></nz-option>
+              <nz-option nzValue="2012" nzLabel="2012"></nz-option>
+              <nz-option nzValue="2013" nzLabel="2013"></nz-option>
+              <nz-option nzValue="2014" nzLabel="2014"></nz-option>
+              <nz-option nzValue="2015" nzLabel="2015"></nz-option>
+              <nz-option nzValue="2016" nzLabel="2016"></nz-option>
+              <nz-option nzValue="2017" nzLabel="2017"></nz-option>
+              <nz-option nzValue="2018" nzLabel="2018"></nz-option>
+              <nz-option nzValue="2019" nzLabel="2019"></nz-option>
+            </nz-select>
+          </div>
+        </div>
+      </div>
+    </nz-card>
+  </form>
+
+  <div class="footer">
+
+    <button nz-button [nzType]="'primary'" (click)="check()" class="ant-btn" style="margin-right: 8px;">
+      <span>مراجعة</span>
+    </button>
+    <button nz-button [nzType]="'primary'" (click)="close()" class="ant-btn" style="margin-right: 8px;">
+      <span>الغاء</span>
+    </button>
+  </div>
+
+  <nz-drawer [nzVisible]="visibleCheck" [nzClosable]="false" (nzOnClose)="closeCheck()" [nzWidth]="1500"
+    *ngIf="studantData !== undefined" class="country">
+    <img *ngIf="imgResultAfterCompress" [src]="imgResultAfterCompress" class="avatar" />
+    <nz-descriptions [nzColumn]="2" nzTitle="البيانات الشخصية">
+      <nz-descriptions-item nzTitle="الاسم الرباعي" [nzSpan]="1" class="country">{{
+      studantData.arabicFullName
+    }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="النوع" [nzSpan]="1">{{
+      studantData.gender
+    }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الديانة" [nzSpan]="1">{{
+      studantData.religion
+    }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الجنسية" [nzSpan]="1">{{
+      studantData.nationality
+    }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="وثيقة اثبات الشخصية" [nzSpan]="1">
+        {{ studantData.pvType }} - {{ studantData.pvNumber }}
+      </nz-descriptions-item>
+
+      <nz-descriptions-item nzTitle="تاريخ الميلاد" [nzSpan]="2">
+        {{ studantData.birthday | date: 'yyyy-MM-dd'  }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="دولة الميلاد" [nzSpan]="2">
+        {{ studantData.birthCountry }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="رقم الهاتف" [nzSpan]="2">
+        {{ studantData.phoneNumber1 }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="رقم الهاتف 2" [nzSpan]="2">
+        {{ studantData.phoneNumber2 }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="العنوان" [nzSpan]="2">
+        {{ studantData.address }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="بيانات ولي الامر">
+      <nz-descriptions-item nzTitle="اسم ولي الامر" [nzSpan]="1">{{
+      studantData.parentName
+    }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="صلة القرابة" [nzSpan]="1">{{
+      studantData.relation
+    }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="رقم الهاتف" [nzSpan]="1">{{
+      studantData.parentPhoneNumber1
+    }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="2 رقم الهاتف" [nzSpan]="1">{{
+      studantData.parentPhoneNumber2
+    }}</nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="بيانات موظف القبول">
+      <nz-descriptions-item nzTitle="تاريخ التقديم" [nzSpan]="1">{{
+      studantData.applyDate | date: 'yyyy-MM-dd'
+    }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الشهادة الثانوية" [nzSpan]="1">{{
+      studantData.CertType
+    }}</nz-descriptions-item>
+      <nz-descriptions-item nzTitle="النسبة المؤوية" [nzSpan]="2">
+        {{ studantData.CertPercentage }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الرقم الجامعي" [nzSpan]="2">
+        {{ studantData.collegeNumber }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="البرنامج" [nzSpan]="2">
+        {{ studantData.program }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="السنة" [nzSpan]="2">
+        {{ studantData.year }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+    <div class="footer">
+      <button nz-button (click)="submitForm()" [nzType]="'primary'" style="margin-right: 8px;">
+        حفظ البينات
+      </button>
+
+      <button nz-button (click)="print()" [nzType]="'primary'" style="margin-right: 8px;">
+        <span>طباعة</span>
+      </button>
+
+      <button nz-button (click)="closeCheck()" [nzType]="'primary'" style="margin-right: 8px;">
+        <span>الغاء</span>
+      </button>
+    </div>
+  </nz-drawer>
+</nz-drawer>

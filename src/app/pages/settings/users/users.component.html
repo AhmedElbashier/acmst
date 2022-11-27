@@ -1,0 +1,62 @@
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>الاسم</th>
+      <th>اسم المستخدم</th>
+      <th>اخر دخول</th>
+      <th>التعديل</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let user of users">
+      <td>{{ user.name }}</td>
+      <td>{{ user.username }}</td>
+      <td>{{ user.lastLogin }}</td>
+      <td><a (click)="editUser(user)">تعديل</a></td>
+    </tr>
+  </tbody>
+</table>
+
+<nz-drawer [nzClosable]="false" [nzVisible]="visible" nzPlacement="right" [nzWidth]="1500" (nzOnClose)="close()">
+
+  <nz-card style="width:1300px;" nzIcon="appstore" nzTitle=" إضافة مستخدم" [nzExtra]="extraTemplate">
+    <form [formGroup]="userForm">
+      <div nz-row [nzGutter]="20">
+        <div nz-col [nzSpan]="7"></div>
+        <div nz-col [nzSpan]="5">
+          <label>كلمة المرور: </label>
+          <input nz-input="SDG" style="width:120px" formControlName="password" placeholder="" tabindex="3" />
+        </div>
+
+        <div nz-col [nzSpan]="5">
+          <label>إسم المستخدم: </label>
+          <input nz-input="SDG" style="width:120px" formControlName="username" placeholder="" tabindex="2" />
+        </div>
+
+        <div nz-col [nzSpan]="7">
+          <label> الإسم الكامل: </label>
+          <input nz-input="SDG" style="width:240px" formControlName="name" placeholder="" tabindex="1" />
+        </div>
+      </div>
+    </form>
+    <br />
+    <label> صلاحيات المستخدم </label>
+    <div>
+      <label nz-checkbox [(ngModel)]="roles.acceptance">القبول</label>
+      <label nz-checkbox [(ngModel)]="roles.approval">الاعتماد</label>
+      <label nz-checkbox [(ngModel)]="roles.registration">المسجل</label>
+      <label nz-checkbox [(ngModel)]="roles.scolarship">المنح</label>
+      <label nz-checkbox [(ngModel)]="roles.installment">رسوم الطلاب</label>
+      <label nz-checkbox [(ngModel)]="roles.exams">الامتحانات</label>
+      <label nz-checkbox [(ngModel)]="roles.settings">الاعدادات</label>
+    </div>
+  </nz-card>
+  <div class="footer">
+    <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;">
+      <span>اغلاق</span>
+    </button>
+    <button type="button" (click)="submitUsers()" class="ant-btn ant-btn-primary">
+      <span>حفظ</span>
+    </button>
+  </div>
+</nz-drawer>

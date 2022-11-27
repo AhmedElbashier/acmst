@@ -1,0 +1,122 @@
+<button nz-button nzType="primary" (click)="open()">Create</button>
+<nz-drawer
+  [nzBodyStyle]="{
+    height: 'calc(100% - 55px)',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }"
+  [nzMaskClosable]="false"
+  [nzWidth]="1080"
+  [nzVisible]="visible"
+  nzTitle="Create"
+  (nzOnClose)="close()"
+>
+  <form (ngSubmit)="submitForm()">
+    <h2>إستمارة تجميد</h2>
+
+    <br />
+    <br />
+    <label class="label">:رقم الطالب</label>
+    <div class="input-group-icon">
+      <input
+        nz-input
+        class="input--style-4 js-datepicker"
+        style="width: 35%"
+        type="text"
+        [(ngModel)]="studant"
+        name="studant"
+      />
+      <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+    </div>
+    <br />
+    <div>
+      <label class="label"> بيانات التسجيل</label>
+      <br />
+      <nz-radio-group [(ngModel)]="academicStand" name="academicStand">
+        <label nz-radio [ngStyle]="style" nzValue="newAcceptance"> مسجل </label>
+        <label nz-radio [ngStyle]="style" nzValue="transfer"> غير مسجل </label>
+      </nz-radio-group>
+    </div>
+    <br />
+    <br />
+    <div>
+      <label class="label">:موقف الرسوم الدراسية</label>
+      <br />
+      <nz-radio-group [(ngModel)]="academicStand" name="academicStand">
+        <label nz-radio [ngStyle]="style" nzValue="newAcceptance">
+          %50 مسدد</label
+        >
+        <label nz-radio [ngStyle]="style" nzValue="transfer"
+          >%50 غير مسدد
+        </label>
+      </nz-radio-group>
+      <br />
+      <br />
+    </div>
+    <div>
+      <label class="label">: تعليق منسق البرنامج</label>
+      <br />
+      <nz-radio-group [(ngModel)]="academicStand" name="academicStand">
+        <label nz-radio [ngStyle]="style" nzValue="newAcceptance">
+          قبول التجميد</label
+        >
+        <label nz-radio [ngStyle]="style" nzValue="transfer">رفض التجميد</label>
+      </nz-radio-group>
+    </div>
+    <br />
+
+    <div>
+      <label class="label">: قرار المجلس العلمي </label>
+      <br />
+      <nz-radio-group [(ngModel)]="academicStand" name="academicStand">
+        <label nz-radio [ngStyle]="style" nzValue="newAcceptance">
+          قبول التجميد</label
+        >
+        <label nz-radio [ngStyle]="style" nzValue="transfer">رفض التجميد</label>
+      </nz-radio-group>
+    </div>
+    <br />
+
+    <label class="label"> بيانات استئناف الدراسة </label>
+    <br />
+    <div>
+      <label class="label"> :العام الدراسي </label>
+      <input
+        nz-input
+        class="input--style-4 js-datepicker"
+        style="width: 35%"
+        type="text"
+        [(ngModel)]="studant"
+        name="studant"
+        nzAllowClear
+        nzPlaceHolder="20.....-20......"
+      />
+      <br />
+      <label class="label"> :الفصل الدراسي </label>
+      <input
+        nz-input
+        class="input--style-4 js-datepicker"
+        style="width: 35%"
+        type="text"
+        [(ngModel)]="studant"
+        name="studant"
+      />
+    </div>
+    <button nz-button class="login-form-button" [nzType]="'primary'">
+      حفظ البينات
+    </button>
+  </form>
+  <div class="footer">
+    <button
+      type="button"
+      (click)="close()"
+      class="ant-btn"
+      style="margin-right: 8px;"
+    >
+      <span>Cancel</span>
+    </button>
+    <button type="button" (click)="close()" class="ant-btn ant-btn-primary">
+      <span>Submit</span>
+    </button>
+  </div>
+</nz-drawer>

@@ -1,0 +1,122 @@
+<nz-drawer [nzBodyStyle]="{
+    height: 'calc(100% - 55px)',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }" [nzMaskClosable]="false" [nzWidth]="1370" [nzVisible]="visible" nzTitle="إستخراج طلب" (nzOnClose)="close()">
+  <form (ngSubmit)="submitForm()">
+   
+    <br />
+    <br />
+    <label class="label">رقم او اسم الطالب:</label>
+    <div class="input-group-icon">
+      <input nz-input class="input--style-4 js-datepicker" style="width: 35%" type="text" [(ngModel)]="studant"
+        name="studant" (ngModelChange)="onChange($event)" [nzAutocomplete]="auto" />
+      <nz-autocomplete #auto>
+        <nz-auto-option (click)="searchcomplete()" *ngFor="let option of options" [nzValue]="option.value" [nzLabel]="option.label">
+          {{ option.label }}</nz-auto-option>
+      </nz-autocomplete>
+    </div>
+    <br />
+  
+  <nz-card>
+    <nz-descriptions *ngIf="student" [nzColumn]="2" nzTitle=" بيانات الطالب">
+      <nz-descriptions-item nzTitle="اسم الطالب" [nzSpan]="1">
+        {{ student.arabicFullName || "" }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الرقم الجامعي " [nzSpan]="1">
+        {{ student.collegeNumber }}
+      </nz-descriptions-item>
+      
+      <nz-descriptions-item nzTitle="البرنامج" [nzSpan]="1">
+        {{ student.program || "" }}
+      </nz-descriptions-item>
+      
+      <nz-descriptions-item nzTitle="المستوى" [nzSpan]="2">
+        {{ student.class || "" }}
+      </nz-descriptions-item>
+      
+    </nz-descriptions>
+    
+  </nz-card>
+  {{ this.validateForm.controls["StudentId"].value }}
+ 
+  <nz-card>
+   
+        <div class="input-group-icon">
+          <label class="label">البرنامج المحول إليه</label>
+          <nz-select nzShowSearch nzAllowClear [(ngModel)]="program" name="program" nzAllowClear nzPlaceHolder="إختيار البرنامج">
+            <nz-option nzValue="برنامج الطب والجراحة" nzLabel="برنامج الطب والجراحة"></nz-option>
+            <nz-option nzValue="برنامج طب الاسنان" nzLabel="برنامج طب الاسنان"></nz-option>
+            <nz-option nzValue="برنامج علوم المختبرات الطبية" nzLabel="برنامج علوم المختبرات الطبية"></nz-option>
+            <nz-option nzValue="برنامج الصيدلة" nzLabel="برنامج الصيدلة"></nz-option>
+            <nz-option nzValue="برنامج العمارة" nzLabel="برنامج العمارة"></nz-option>
+            <nz-option nzValue="برنامج الهندسة المدنية" nzLabel="برنامج الهندسة المدنية"></nz-option>
+            <nz-option nzValue="برنامج الهندسة الكهربائية والالكترونية"
+              nzLabel="برنامج الهندسة الكهربائية والالكترونية">
+            </nz-option>
+            <nz-option nzValue="برنامج تقانة المعلومات" nzLabel="برنامج تقانة المعلومات"></nz-option>
+            <nz-option nzValue="برنامج الاقتصاد والدراسات المصرفية" nzLabel="برنامج الاقتصاد والدراسات المصرفية">
+            </nz-option>
+            <nz-option nzValue="برنامج العلوم الادارية" nzLabel="برنامج العلوم الادارية"></nz-option>
+          </nz-select>
+       
+        </div>
+        <br />
+        <div class="input-group-icon">
+          <label class="label">المستوى المحول إليه</label>
+          <nz-select nzShowSearch nzAllowClear [(ngModel)]="stdclass" name="stdclass" nzAllowClear nzPlaceHolder=" إختيار المستوى">
+            <nz-option nzValue="الاول" nzLabel="المستوى الاول"></nz-option>
+            <nz-option nzValue="الثاني" nzLabel="المستوى الثاني"></nz-option>
+            <nz-option nzValue="الثالث" nzLabel="المستوى الثالث"></nz-option>
+            <nz-option nzValue="الرابع" nzLabel="المستوى الرابع"></nz-option>
+            <nz-option nzValue="الخامس" nzLabel="المستوى الخامس"></nz-option>
+            </nz-select>
+          </div>
+          <br/>
+     
+  </nz-card>
+  
+  
+    <br />
+    <button (click)="transfare()" nz-button class="login-form-button" [nzType]="'primary'">
+      تحويل
+    </button>
+  </form>
+  <div class="footer">
+    <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;">
+      <span>إلغاء</span>
+    </button>
+  </div>
+  </nz-drawer>
+  
+  
+  
+  <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+      <thead>
+        <tr>
+          <th>اسم الطالب</th>
+          <th>الجنسية</th>
+          <th>نوع الشهادة</th>
+          <th>تاريخ التقديم</th>
+          <th>البرنامج</th>
+          <th>المستوى</th>
+          <th>العام الدراسي</th>
+          <th>الحالة</th>
+          <th>العمليات</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of StudantsData">
+          <td>{{ data.arabicFullName }}</td>
+          <td>{{ data.nationality }}</td>
+          <td>{{ data.CertType }}</td>
+          <td>{{ data.applyDate }}</td>
+          <td>{{ data.program }}</td>
+          <td>{{ data.class }}</td>
+          <td>{{ data.stdYear }}</td>
+          <td>{{ data.status }}</td>
+          <td><a (click)="showStudent(data.id)">عرض</a></td>
+        </tr>
+      </tbody>
+    </table>
+    

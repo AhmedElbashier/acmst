@@ -1,0 +1,96 @@
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>الرقم الجامعي</th>
+      <th>اسم الطالب</th>
+      <th>البرنامج</th>
+      <th>العام الدراسي</th>
+      <th>تاريخ القبول</th>
+      <th>نوع القبول</th>
+      <th>الحالة</th>
+      <th>نوع المنحة/التخفيض</th>
+      <th>النسبة</th>
+      <th>العملة</th>
+      <th>تعديل</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of scolarships">
+      <td>{{ data.collegeNumber }}</td>
+      <td>{{ data.arabicFullName }}</td>
+      <td>{{ data.program }}</td>
+      <td>{{ data.stdYear }}</td>
+      <td>{{ data.applyDate }}</td>
+      <td>{{ data.academicStand }}</td>
+      <td>{{ data.status }}</td>
+      <td>{{ data.scolarshipType }}</td>
+      <td>{{ 100 - data.scolarship * 100 }}%</td>
+      <td>{{ data.currency }}</td>
+      <td><a (click)="editScolarship(data)">تعديل</a> - <a style="margin: 5px;"
+          (click)="removeScolarship(data)">الغاء</a>
+      </td>
+    </tr>
+  </tbody>
+</table>
+<nz-drawer [nzBodyStyle]="{
+    height: 'calc(100% - 55px)',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }" [nzMaskClosable]="false" [nzWidth]="1080" [nzVisible]="visible" nzTitle="Create" (nzOnClose)="close()">
+  <form nz-form [formGroup]="validateForm" (ngSubmit)="submit()">
+    <label class="label">رقم او اسم الطالب:</label>
+    <div class="input-group-icon">
+      <input nz-input type="text" formControlName="studantId" (ngModelChange)="onChange($event)" [nzAutocomplete]="auto"
+        style="width: 300xp;" />
+      <nz-autocomplete #auto>
+        <nz-auto-option *ngFor="let option of options" [nzValue]="option.value" [nzLabel]="option.label">
+          {{ option.label }}</nz-auto-option>
+      </nz-autocomplete>
+    </div>
+    <br />
+    <br />
+    <label class="label">نوع المنحة:</label>
+    <br />
+    <div>
+      <nz-radio-group formControlName="scolarshipType" name="scolarshipType">
+        <label nz-radio [ngStyle]="style" nzValue="منحة وزارة">منحة وزارة</label>
+        <label nz-radio [ngStyle]="style" nzValue="منحة داخلية إجتماعية">منحة داخلية إجتماعية</label>
+        <label nz-radio [ngStyle]="style" nzValue="منحة داخلية تفوق أكاديمي">منحة داخلية تفوق أكاديمي</label>
+        <label nz-radio [ngStyle]="style" nzValue="تخفيض مستمر">تخفيض مستمر</label>
+        <label nz-radio [ngStyle]="style" nzValue="تخفيض أشقاء">تخفيض أشقاء</label>
+        <label nz-radio [ngStyle]="style" nzValue="تخفيض رسوم لمدة عام">تخفيض رسوم لمدة عام</label>
+      </nz-radio-group>
+    </div>
+    <br />
+    <div *ngIf="validateForm.controls['scolarshipType'].value == 'تخفيض أشقاء'">
+      <label class="label">رقم او اسم الطالب:</label>
+      <div class="input-group-icon">
+        <input nz-input type="text" formControlName="brotherId" (ngModelChange)="onChange($event)"
+          [nzAutocomplete]="auto" style="width: 300xp;" />
+        <nz-autocomplete #auto>
+          <nz-auto-option *ngFor="let option of options" [nzValue]="option.value" [nzLabel]="option.label">
+            {{ option.label }}</nz-auto-option>
+        </nz-autocomplete>
+      </div>
+    </div>
+    <div *ngIf="
+        validateForm.controls['scolarshipType'].value.includes('مستمر') ||
+        validateForm.controls['scolarshipType'].value.includes('رسوم')
+      ">
+      <label class="label">تخفيض بنسبة:</label>
+      <div>
+        <nz-input-number formControlName="scolarship" name="scolarship" [nzMin]="1" [nzMax]="100" [nzStep]="1">
+        </nz-input-number>
+      </div>
+    </div>
+    <br />
+  </form>
+  <div class="footer">
+    <button nz-button class="login-form-button" (click)="submit()" [nzType]="'primary'">
+      حفظ البينات
+    </button>
+    <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;">
+      <span>إلغاء</span>
+    </button>
+  </div>
+</nz-drawer>

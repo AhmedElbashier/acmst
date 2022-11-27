@@ -1,0 +1,51 @@
+.ant-advanced-search-form {
+    padding: 24px;
+    background: #fbfbfb;
+    border: 1px solid #d9d9d9;
+    border-radius: 6px;
+    text-align: right;
+  }
+  
+  div {
+    text-align: right;
+  }
+  
+  [nz-form-label] {
+    text-align: right;
+    overflow: visible;
+  }
+  
+  button {
+    text-align: right;
+  }
+  
+  .collapse {
+    font-size: 12px;
+    text-align: right;
+  }
+  
+  .search-area {
+    text-align: right;
+    text-align: right;
+  }
+  
+  .example-input .ant-input {
+    width: 50px;
+  }
+  
+  .example-input .ant-input {
+    width: 50px;
+  }
+  
+  .label-en {
+    text-align: left;
+  }
+  
+  .textarea {
+    text-align: right;
+  }
+  
+  .phone-select {
+    width: 20%;
+  }
+  

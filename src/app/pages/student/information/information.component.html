@@ -1,0 +1,206 @@
+<div *ngIf="loadData">
+  <button (click)="registrationForm()">استمارة تسجيل</button>
+  <!-- <button (click)="Open()">عمليات اخرى</button> -->
+    <nz-card nzTitle="بيانات الطالب">
+    <img [src]="studantData.pic" class="avatar" />
+    <nz-descriptions [nzColumn]="2" nzTitle="البيانات الشخصية">
+      <nz-descriptions-item nzTitle="الاسم الرباعي" [nzSpan]="1" class="country">
+        {{ studantData.arabicFullName }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="النوع" [nzSpan]="1">
+        {{ studantData.gender }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الديانة" [nzSpan]="1">
+        {{ studantData.religion}}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الجنسية" [nzSpan]="1">
+        {{ studantData.nationality }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="وثيقة اثبات الشخصية" [nzSpan]="1">
+        {{ studantData.pvType }} - {{ studantData.pvNumber }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="تاريخ الميلاد" [nzSpan]="2">
+        {{ studantData.birthday | date: 'yyyy-MM-dd'  }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="دولة الميلاد" [nzSpan]="2">
+        {{ studantData.birthCountry }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="رقم الهاتف" [nzSpan]="2">
+        {{ studantData.phoneNumber1 }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="رقم الهاتف 2" [nzSpan]="2">
+        {{ studantData.phoneNumber2 }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="العنوان" [nzSpan]="2">
+        {{ studantData.address }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="بيانات ولي الامر">
+      <nz-descriptions-item nzTitle="اسم ولي الامر" [nzSpan]="1">
+        {{studantData.parentName }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="صلة القرابة" [nzSpan]="1">
+        {{ studantData.relation}}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="رقم الهاتف" [nzSpan]="1">
+        {{studantData.parentPhoneNumber1}}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="2 رقم الهاتف" [nzSpan]="1">
+        {{ studantData.parentPhoneNumber2 }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+    <nz-divider></nz-divider>
+    <nz-descriptions [nzColumn]="2" nzTitle="بيانات القبول">
+      <nz-descriptions-item nzTitle="تاريخ التقديم" [nzSpan]="1">
+        {{ studantData.applyDate | date: 'yyyy-MM-dd'  }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الشهادة الثانوية" [nzSpan]="1">
+        {{ studantData.CertType }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="النسبة المؤوية" [nzSpan]="2">
+        {{ studantData.CertPercentage }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="الرقم الجامعي" [nzSpan]="2">
+        {{ studantData.collegeNumber }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="البرنامج" [nzSpan]="2">
+        {{ studantData.program }}
+      </nz-descriptions-item>
+      <nz-descriptions-item nzTitle="السنة" [nzSpan]="2">
+        {{ studantData.year }}
+      </nz-descriptions-item>
+    </nz-descriptions>
+  </nz-card>
+  <nz-divider></nz-divider>
+  <nz-card nzTitle="البيانات المالية" [nzExtra]="extraTemplate">
+    <div id='installments'>
+      <nz-descriptions [nzColumn]="2" nzTitle="">
+        <nz-descriptions-item nzTitle="نوع العملة" [nzSpan]="1">
+          {{ account.currency }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="رسوم الطالب" [nzSpan]="1">
+          {{ account.tolls  }} + {{ account.registration }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="المودع لدى الكلية" [nzSpan]="1">
+          {{ account.amount }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="المتبقي من الرسوم" [nzSpan]="1">
+          {{ account.left }}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="نوع المنحة/التخفيض" [nzSpan]="2">
+          {{ account.scolarshipType}}
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="نسبة التخفيض" [nzSpan]="2">
+          {{ 100 - (account.scolarship * 100) }}%
+        </nz-descriptions-item>
+        <nz-descriptions-item nzTitle="" [nzSpan]="1">
+          <label class="label">السنة:</label>
+          <nz-select [(ngModel)]="selectedYear" class="select" style="width: 130px;">
+            <nz-option *ngFor="let y of years" nzValue="{{ y }}" nzLabel="{{ y }}"></nz-option>
+          </nz-select>
+          <button type="button" (click)="printStatment(studant.id)" class="ant-btn" style="margin-right: 8px;">
+            <span>طباعة كشف الحساب</span>
+          </button>
+        </nz-descriptions-item>
+      </nz-descriptions>
+
+      <table datatable [dtOptions]="dtOptions">
+        <thead>
+          <tr>
+            <th>تاريخ الايصال</th>
+            <th>نوع الرسوم</th>
+            <th>رقم الايصال</th>
+            <th>المبلغ</th>
+            <th>طباعة</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let data of payments">
+            <td>{{ data.created_at  | date: "yyyy-MM-dd" }}</td>
+            <td>{{ data.PaymentType }}</td>
+            <td>{{ data.StatmentNumber }}</td>
+            <td>{{ data.amount }}</td>
+            <td>
+              <button type="button" nz-button [nzType]="'default'" (click)="printInvoice(data.id)">
+                طباعة
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <br />
+      <table datatable [dtOptions]="dtOptions">
+        <thead>
+          <tr>
+            <th>رقم الاشعار</th>
+            <th>تاريخ الاشعار</th>
+            <th>المبلغ</th>
+            <th>المتبقي</th>
+            <th>طباعة</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let data of transactions">
+            <td>{{ data.id }}</td>
+            <td>{{ data.StatmentDate}}</td>
+            <td>{{ data.amount }}</td>
+            <td>{{ data.leftover }}</td>
+            <td>
+              <button type="button" nz-button [nzType]="'default'" (click)="printTransaction(data.id)">
+                طباعة
+              </button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <!-- <div>
+    <table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+      <thead>
+        <tr>
+          <th>الرقم الجامعي</th>
+          <th>اسم الطالب</th>
+          <th>البرنامج</th>
+          <th>العام الدراسي</th>
+          <th>تاريخ القبول</th>
+          <th>نوع القبول</th>
+          <th>الحالة</th>
+          <th>نوع المنحة/التخفيض</th>
+          <th>النسبة</th>
+          <th>العملة</th>
+          <th>تعديل</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr *ngFor="let data of scolarships">
+          <td>{{ data.collegeNumber }}</td>
+          <td>{{ data.arabicFullName }}</td>
+          <td>{{ data.program }}</td>
+          <td>{{ data.stdYear }}</td>
+          <td>{{ data.applyDate }}</td>
+          <td>{{ data.academicStand }}</td>
+          <td>{{ data.status }}</td>
+          <td>{{ data.scolarshipType }}</td>
+          <td>{{ 100 - (data.scolarship * 100) }}%</td>
+          <td>{{ data.currency }}</td>
+          <td><a (click)="editScolarship(data)">تعديل</a></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+31812954
+110211795
+-->
+    <!-- <div class="footer">
+    <button nz-button (click)="print()" [nzType]="'primary'">
+      <span>طباعة</span>
+    </button>
+    <button nz-button (click)="closeCheck()" [nzType]="'primary'" style="margin-right: 10px;">
+      <span>الغاء</span>
+    </button>
+  </div> -->
+  </nz-card>
+</div>

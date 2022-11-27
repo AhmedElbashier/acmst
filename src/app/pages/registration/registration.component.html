@@ -1,0 +1,96 @@
+<!-- <nz-card style="width:1130px;">
+  <ul nz-menu [nzMode]="'horizontal'" style="width: 480px;">
+    <li nz-submenu (nzOpenChange)="change($event)" nzTitle="البطاقة" nzIcon="appstore">
+      <ul>
+        <li>
+          <ul>
+            <li nz-menu-item>استخراج بطاقة</li>
+            <li nz-menu-item>بدل فاقد</li>
+            <li nz-menu-item>إذن دخول الإمتحانات</li>
+          </ul>
+        </li>
+      </ul>
+    </li>
+    <li nz-submenu (nzOpenChange)="change($event)" nzTitle="إجرائات الطلاب" nzIcon="appstore">
+      <ul>
+
+        <li nz-menu-item><a (click)="action(1,data.id)" class="ant-btn">تجميد</a> </li>
+        <li nz-menu-item> إستقالة</li>
+        <li nz-menu-item>تحويل داخلي</li>
+        <li nz-menu-item> تسجيل ومتابعة مصروفات</li>
+
+      </ul>
+    </li>
+  </ul>
+
+</nz-card> -->
+
+<nz-drawer [nzBodyStyle]="{
+    height: 'calc(100% - 55px)',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }" [nzMaskClosable]="false" [nzWidth]="1080" [nzVisible]="visible" nzTitle="Create" (nzOnClose)="close()">
+  <form (ngSubmit)="submitForm()">
+    <label class="label">بيانات المسجل:</label>
+    <br />
+    <br />
+    <label class="label">رقم او اسم الطالب:</label>
+    <div class="input-group-icon">
+      <input nz-input class="input--style-4 js-datepicker" style="width: 35%" type="text" [(ngModel)]="studant"
+        name="studant" (ngModelChange)="onChange($event)" [nzAutocomplete]="auto" />
+      <nz-autocomplete #auto>
+        <nz-auto-option *ngFor="let option of options" [nzValue]="option.value" [nzLabel]="option.label">
+          {{ option.label }}</nz-auto-option>
+      </nz-autocomplete>
+    </div>
+    <br />
+
+    <div>
+      <label class="label">الموقف الأكاديمي:</label>
+      <br />
+      <nz-radio-group [(ngModel)]="academicStand" name="academicStand">
+        <label nz-radio [ngStyle]="style" nzValue="فك تجميد">فك تجميد</label>
+        <label nz-radio [ngStyle]="style" nzValue="من الخارج">من الخارج</label>
+      </nz-radio-group>
+    </div>
+
+    <br />
+    <button nz-button class="login-form-button" [nzType]="'primary'">
+      حفظ البينات
+    </button>
+  </form>
+  <div class="footer">
+    <button type="button" (click)="close()" class="ant-btn" style="margin-right: 8px;">
+      <span>إلغاء</span>
+    </button>
+  </div>
+</nz-drawer>
+
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>اسم الطالب</th>
+      <th>الجنسية</th>
+      <th>نوع الشهادة</th>
+      <th>تاريخ التقديم</th>
+      <th>البرنامج</th>
+      <th>المستوى</th>
+      <th>العام الدراسي</th>
+      <th>الحالة</th>
+      <th>العمليات</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of StudantsData">
+      <td>{{ data.arabicFullName }}</td>
+      <td>{{ data.nationality }}</td>
+      <td>{{ data.CertType }}</td>
+      <td>{{ data.applyDate }}</td>
+      <td>{{ data.program }}</td>
+      <td>{{ data.class }}</td>
+      <td>{{ data.stdYear }}</td>
+      <td>{{ data.status }}</td>
+      <td><a (click)="showStudent(data.id)">عرض</a></td>
+    </tr>
+  </tbody>
+</table>

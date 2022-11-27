@@ -1,0 +1,79 @@
+<button nz-button nzType="primary" (click)="open()">إضافة</button>
+<nz-drawer
+  [nzBodyStyle]="{
+    height: 'calc(100% - 55px)',
+    overflow: 'auto',
+    'padding-bottom': '53px'
+  }"
+  [nzMaskClosable]="false"
+  [nzWidth]="1080"
+  [nzVisible]="visible"
+  nzTitle="Create"
+  (nzOnClose)="close()"
+>
+  <form (ngSubmit)="submitForm()">
+    <h2>إستمارة إستقالة</h2>
+
+    <br />
+    <br />
+    <label class="label">رقم الطالب:</label>
+    <div class="input-group-icon">
+      <input
+        nz-input
+        class="input--style-4 js-datepicker"
+        style="width: 35%"
+        type="text"
+        [(ngModel)]="studant"
+        name="studant"
+      />
+      <i class="zmdi zmdi-calendar-note input-icon js-btn-calendar"></i>
+    </div>
+    <br />
+    <label class="label"> بيانات التسجيل</label>
+    <br />
+    <br />
+    <div>
+      <label class="label">موقف التسجيل:</label>
+      <br />
+      <nz-radio-group [(ngModel)]="academicStand" name="academicStand">
+        <label nz-radio [ngStyle]="style" nzValue="newAcceptance"> مسجل</label>
+        <label nz-radio [ngStyle]="style" nzValue="transfer">غير مسجل</label>
+      </nz-radio-group>
+      <br />
+      <br />
+      <label class="label">الموقف الأكاديمي:</label>
+      <br />
+      <nz-radio-group [(ngModel)]="academicStand" name="academicStand">
+        <label nz-radio [ngStyle]="style" nzValue="newAcceptance"> تجميد</label>
+        <label nz-radio [ngStyle]="style" nzValue="transfer">إنتقال</label>
+        <label nz-radio [ngStyle]="style" nzValue="rebeat">إعادة</label>
+      </nz-radio-group>
+    </div>
+    <br />
+    <label class="label"> تعليق مسجل البرنامج </label>
+    <br />
+    <div>
+      <input
+        nz-input
+        class="input--style-4 js-datepicker"
+        style="width: 35%"
+        type="text"
+        [(ngModel)]="studant"
+        name="studant"
+      />
+    </div>
+  </form>
+  <div class="footer">
+    <button nz-button class="login-form-button" [nzType]="'primary'">
+      حفظ البينات
+    </button>
+    <button
+      type="button"
+      (click)="close()"
+      class="ant-btn"
+      style="margin-right: 8px;"
+    >
+      <span>إلغاء</span>
+    </button>
+  </div>
+</nz-drawer>

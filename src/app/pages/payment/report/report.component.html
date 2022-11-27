@@ -1,0 +1,62 @@
+<div id="filter">
+  <nz-range-picker [(ngModel)]="range" nzFormat="yyyy-MM-dd" [nzPlaceHolder]="['تاريخ البداية', 'تاريخ النهاية']">
+  </nz-range-picker>
+  <nz-select style="width: 280px;" [(ngModel)]="program" nzPlaceHolder="'البرنامج'">
+    <nz-option nzValue="الكل" nzLabel="الكل"></nz-option>
+    <nz-option nzValue="برنامج الطب والجراحة" nzLabel="برنامج الطب والجراحة"></nz-option>
+    <nz-option nzValue="برنامج طب الاسنان" nzLabel="برنامج طب الاسنان"></nz-option>
+    <nz-option nzValue="برنامج علوم المختبرات الطبية" nzLabel="برنامج علوم المختبرات الطبية"></nz-option>
+    <nz-option nzValue="برنامج الصيدلة" nzLabel="برنامج الصيدلة"></nz-option>
+    <nz-option nzValue="برنامج العمارة" nzLabel="برنامج العمارة"></nz-option>
+    <nz-option nzValue="برنامج الهندسة المدنية" nzLabel="برنامج الهندسة المدنية"></nz-option>
+    <nz-option nzValue="برنامج الهندسة الكهربائية والالكترونية" nzLabel="برنامج الهندسة الكهربائية والالكترونية">
+    </nz-option>
+    <nz-option nzValue="برنامج تقانة المعلومات" nzLabel="برنامج تقانة المعلومات"></nz-option>
+    <nz-option nzValue="برنامج الاقتصاد والدراسات المصرفية" nzLabel="برنامج الاقتصاد والدراسات المصرفية">
+    </nz-option>
+    <nz-option nzValue="برنامج العلوم الادارية" nzLabel="برنامج العلوم الادارية"></nz-option>
+  </nz-select>
+  <nz-select style="width: 130px;" nzPlaceHolder="العملة" [(ngModel)]="currency">
+    <nz-option nzValue="الكل" nzLabel="الكل"></nz-option>
+    <nz-option nzValue="جنيه" nzLabel="جنيه"></nz-option>
+    <nz-option nzValue="دولار" nzLabel="دولار"></nz-option>
+  </nz-select>
+  <nz-select style="width: 130px;" nzPlaceHolder="طريقة الدفع" [(ngModel)]="method">
+    <nz-option nzValue="الكل" nzLabel="الكل"></nz-option>
+    <nz-option nzValue="نقدي" nzLabel="نقدي"></nz-option>
+    <nz-option nzValue="بنكي" nzLabel="بنكي"></nz-option>
+  </nz-select>
+  <button style="margin: 10px;" (click)="getData()" nz-button [nzType]="'primary'">
+    تحديث
+  </button>
+</div>
+<table datatable [dtOptions]="dtOptions" [dtTrigger]="dtTrigger" class="row-border hover">
+  <thead>
+    <tr>
+      <th>رقم الايصال</th>
+      <th>اسم الطالب</th>
+      <th>نوع الدفعية</th>
+      <th>المبلغ </th>
+      <th>المودع لدى الكلية</th>
+      <th>الإشعار</th>
+      <th>تاريخ الأشعار</th>
+      <th>طباعة</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let data of transactions">
+      <td>{{ data.ReceiptNumber }}</td>
+      <td>{{ data.stdName }}</td>
+      <td>{{ data.PaymentMethod }}</td>
+      <td>{{ data.amount }}</td>
+      <td>{{ data.leftover }}</td>
+      <td>{{ data.StatmentNumber }}</td>
+      <td>{{ data.StatmentDate }}</td>
+      <td>
+        <button type="button" nz-button [nzType]="'default'" (click)="printInvoice(data.id)">
+          طباعة
+        </button>
+      </td>
+    </tr>
+  </tbody>
+</table>
